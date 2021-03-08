@@ -1,0 +1,167 @@
+openapi: 3.0.0
+
+info:
+  description: This API recieves readings from scanners to update inventory
+  version: "1.0.0"
+  title: Inventory management API
+  contact:
+    email: andrewj@Sofresh.com
+
+paths:
+  /grocery_item:
+    get:
+      summary: gets the event stat
+      operationId: app.get_grocery_reading
+      description: Gets grocery and produce shipment scan processed statistics
+      parameters:
+        - name: index
+          in: query
+          description: Gets GC at the index in eventstore
+          schema:
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: Successfully returned a list of shipment events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/GroceryItem'
+        '400':
+          description: 'Invalid request'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+
+  /produce_item:
+    get:
+      summary: gets the event stat
+      operationId: app.get_produce_reading
+      description: Gets grocery and produce shipment scan processed statistics
+      parameters:
+        - name: index
+          in: query
+          description: Gets GC at the index in eventstore
+          schema:
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: Successfully returned a list of shipment events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ProduceItem'
+        '400':
+          description: 'Invalid request'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+
+components:
+  schemas:
+    GroceryItem:
+      type: object
+      required:
+        - id
+        - name
+        - manufacturer
+        - price
+        - manufacture_date
+        - expiration_date
+        - quantity
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d701748f0851
+        name:
+          type: string
+          example: Kraft Mac & Cheese 150g
+        price:
+          type: string
+          example: $5.49
+        manufacture_date:
+          type: string
+          format: date-time
+          example: 2021-01-16 18:45:40.679070
+        expiration_date:
+          type: string
+          format: date-time if applicable
+          example: 2021-02-16 18:45:40.679070
+        quantity:
+          type: integer
+          example: 2
+        manufacturer:
+          type: string
+          example: Kraft Corporation
+
+    ProduceItem:
+      type: object
+      required:
+        - id
+        - name
+        - supplier
+        - price
+        - expiration_date
+        - weight
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d701748f0851
+        name:
+          type: string
+          example: Red Grapes
+        supplier:
+          type: string
+          example: Jensen Farms
+        price:
+          type: string
+          example: $5.49
+        expiration_date:
+          type: string
+          format: date-time if applicable
+          example: 2021-02-16 18:45:40.679070
+        weight:
+          type: string
+          example: 650g
+        quantity:
+          type: integer
+          example: 2

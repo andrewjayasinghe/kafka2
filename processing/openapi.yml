@@ -1,0 +1,62 @@
+openapi: 3.0.0
+
+info:
+  description: This API recieves readings from scanners to update inventory
+  version: "1.0.0"
+  title: Inventory management API
+  contact:
+    email: andrewj@Sofresh.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: scanners
+    description: Operations available for Item scanners (barcode scanners)
+
+paths:
+  /stats:
+    get:
+      summary: gets the event stat
+      operationId: app.get_stats
+      description: Gets grocery and produce shipment scan processed statistics
+      responses:
+        '200':
+          description: Successfully returned a list of shipment events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ReadingStats'
+        '400':
+          description: 'Invalid request'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    ReadingStats:
+      required:
+        - num_grc_readings
+        - max_grc_qty
+        - num_pr_readings
+        - max_pr_qty
+      properties:
+        num_grc_readings:
+          type: integer
+          example: 500000
+        max_grc_qty:
+          type: integer
+          example: 200
+        num_pr_readings:
+          type: integer
+          example: 500000
+        max_pr_qty:
+          type: integer
+          example: 200
+      type: object
+

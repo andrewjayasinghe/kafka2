@@ -1,0 +1,129 @@
+openapi: 3.0.0
+
+info:
+  description: This API recieves readings from scanners to update inventory
+  version: "1.0.0"
+  title: Inventory management API
+  contact:
+    email: andrewj@Sofresh.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: scanners
+    description: Operations available for Item scanners (barcode scanners)
+
+paths:
+  /scans/Groceries:
+    post:
+      tags:
+        - shipment
+      summary:  Adds an item to the inventory
+      operationId: app.grocery_item_scan
+      description: adds a grocery to the store's inventory
+      responses:
+        '201':
+          description: item added
+        '400':
+          description: 'invalid input, object invalid, invalid scan'
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroceryItem'
+        description: Inventory item to add
+
+  /scans/Produce:
+    post:
+      tags:
+        - produce
+      summary: adds produce items in shipments to inventory
+      operationId: app.produce_item_scan
+      description: updates inventory when an produce shipments arrive
+      responses:
+        '201':
+          description: item updated
+        '400':
+          description: 'invalid input, object invalid, invalid scan'
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProduceItem'
+        description: Inventory item to add
+
+
+components:
+  schemas:
+    GroceryItem:
+      type: object
+      required:
+        - id
+        - name
+        - manufacturer
+        - price
+        - manufacture_date
+        - expiration_date
+        - quantity
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d701748f0851
+        name:
+          type: string
+          example: Kraft Mac & Cheese 150g
+        price:
+          type: string
+          example: $5.49
+        manufacture_date:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+        expiration_date:
+          type: string
+          format: date-time if applicable
+          example: 2016-08-29T09:12:33.001Z
+        quantity:
+          type: integer
+          example: 2
+        manufacturer:
+          type: string
+          example: Kraft Corporation
+
+    ProduceItem:
+      type: object
+      required:
+        - id
+        - name
+        - supplier
+        - price
+        - expiration_date
+        - weight
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d701748f0851
+        name:
+          type: string
+          example: Red Grapes
+        supplier:
+          type: string
+          example: Jensen Farms
+        price:
+          type: string
+          example: $5.49
+        expiration_date:
+          type: string
+          format: date-time if applicable
+          example: 2016-08-29T09:12:33.001Z
+        weight:
+          type: string
+          example: 650g
+        quantity:
+          type: integer
+          example: 2
+

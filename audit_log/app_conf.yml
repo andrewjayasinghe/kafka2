@@ -1,0 +1,5 @@
+version: 1
+events:
+  hostname: dns-for-kafka.westus2.cloudapp.azure.com
+  port: 9092
+  topics: events
