@@ -4,4 +4,4 @@ datastore:
 scheduler:
   period_sec: 20
 eventstore:
-  url: http://localhost:8090
+  url: http://dns-for-kafka.westus2.cloudapp.azure.com:8090

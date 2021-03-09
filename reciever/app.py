@@ -8,7 +8,7 @@ import yaml
 from connexion import NoContent
 import requests
 
-STORAGE_URL = 'http://localhost:8090'
+
 MAX_EVENTS = 10
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
