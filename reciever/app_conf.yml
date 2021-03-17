@@ -1,9 +1,9 @@
 version: 1
 Groceries:
-  url: http://dns-for-kafka.westus2.cloudapp.azure.com:8090/scans/Groceries
+  url: http://35.208.49.115:8090/scans/Groceries
 Produce:
-  url: http://dns-for-kafka.westus2.cloudapp.azure.com:8090/scans/Produce
+  url: http://35.208.49.115:8090/scans/Produce
 events:
-  hostname: dns-for-kafka.westus2.cloudapp.azure.com
+  hostname: 35.208.49.115
   port: 9092
   topics: events
