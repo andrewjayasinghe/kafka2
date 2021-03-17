@@ -2,11 +2,11 @@ version: 1
 datastore:
   user: user
   password: password
-  hostname: dns-for-kafka.westus2.cloudapp.azure.com
+  hostname: 35.208.49.115
   port: 3306
   db: events
 
 events:
-  hostname: dns-for-kafka.westus2.cloudapp.azure.com
+  hostname: 35.208.49.115
   port: 9092
   topics: events
