@@ -59,7 +59,7 @@ services:
   audit_log:
     image: audit_log
     ports:
-      - "8110:8110"	 
+      - "8110:8110"
     depends_on:
       - "kafka"
   processing:
