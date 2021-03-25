@@ -66,6 +66,13 @@ services:
     image: processing
     network_mode: "host"
     depends_on:
-      - "storage"  
+      - "storage" 
+  dashboard:
+    image: dashboard
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "processing"
+      - "audit_log"
 volumes:
   my-db:
