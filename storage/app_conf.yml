@@ -10,3 +10,5 @@ events:
   hostname: 35.208.49.115
   port: 9092
   topics: events
+  max_try: 25
+  time: 5

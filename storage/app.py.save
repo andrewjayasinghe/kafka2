@@ -133,12 +133,14 @@ def get_produce_scan(start_timestamp, end_timestamp):
     for reading in readings:
         results_list.append(reading.to_dict())
 
+
     session.close()
 
     logger.info("Query for Produce scan readings after %s returns %d results" %
                 (start_timestamp, len(results_list)))
 
     return results_list, 200
+
 
 def process_messages():
     '''Process event messages'''
@@ -147,13 +149,16 @@ def process_messages():
     max_try = app_config["events"]["max_try"]
     count = 0
     timing = app_config["events"]["time"]
-    
+
     while count < max_try:
         try:
             logger.info("Trying to connect to Kafka! try no: %d" %count)
             client = KafkaClient(hosts=hostname)
             topic = client.topics[str.encode(app_config["events"]["topics"])]
             consumer = topic.get_simple_consumer(consumer_group=b'event_group',reset_offset_on_start=False,auto_offset_reset=OffsetType.LATEST)
+            consumer.stop()
+            time.sleep(timing)
+            consumer.start()
             logger.info("processing messages")
 
             for msg in consumer:
@@ -163,18 +168,17 @@ def process_messages():
                 payload = msg["payload"]
                 if msg["type"]  == "gc":
                     grocery_item_scan(payload)
-                    logger.debug("Stored event grocery_scan request with a unique id of " + str(payload['id']))
+                    logger.debug("Stored event assign_gate request with a unique id of " + str(payload['id']))
 
                 elif msg["type"]  == "pr":
                     produce_item_scan(payload)
-                    logger.debug("Stored event produce_scan request with a unique id of " + str(payload['id']))
 
                 consumer.commit_offsets()
-                break
+        except SockertDisconnectionError as e:
+            logger.error("Lost connection to kafka socket")
         except:
             logger.error("Lost connection in some other way")
-            time.sleep(timing)
-            count += 1
+
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
