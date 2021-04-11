@@ -12,10 +12,12 @@ import logging.config
 import connexion
 
 
-if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
-    print("In Test Environment")
-    app_conf_file = "/config/app_conf.yml"
-    log_conf_file = "/config/log_conf.yml"
+if "TARGET_ENV" not in os.environ and os.environ["TARGET_ENV"] != "test":
+    #print("In Test Environment")
+    #app_conf_file = "/config/app_conf.yml"
+    #log_conf_file = "/config/log_conf.yml"
+    CORS(app.app)
+    app.app.config['CORS_HEADERS'] = 'Content-Type'
 else:
     print("In Dev Environment")
     app_conf_file = "app_conf.yml"
@@ -103,7 +105,7 @@ def get_produce_reading(index):
 app = connexion.FlaskApp(__name__, specification_dir='')
 CORS(app.app)
 app.app.config['CORS_HEADERS'] = 'Content-Type'
-app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
+app.add_api("openapi.yml",base_path="/audit_log", strict_validation=True, validate_responses=True)
 
 if __name__ == "__main__":
     app.run(port=8110, use_reloader=False)

@@ -50,10 +50,26 @@ services:
       # Where our data will be persisted
     volumes: 
       - my-db:/var/lib/mysql
+  nginx:
+    image: nginx:latest
+    volumes:
+      - /home/heshronferdi/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - "reciever"
+      - "storage"
+      - "processing"
+      - "audit_log"
+      - "dashboard-ui"
+    ports"
+      - "80:80"
+    networks:
+      - "api.network"
   reciever:
     image: reciever
     ports:
-      - "8080:8080"
+      - "8080"
+    networks:
+      - "api.network"
     environment:
      - TARGET_ENV=test
     volumes:
@@ -64,7 +80,9 @@ services:
   audit_log:
     image: audit_log
     ports:
-      - "8110:8110"
+      - "8110"
+    networks:
+      - "api.network"
     environment:
       - TARGET_ENV=test
     volumes:
@@ -74,7 +92,10 @@ services:
       - "kafka"
   processing:
     image: processing
-    network_mode: "host"
+    ports:
+      - "8100"
+    networks:
+      - "api.network"
     environment:
       - TARGET_ENV=test
     volumes:
@@ -86,14 +107,18 @@ services:
   dashboard:
     image: dashboard
     ports:
-      - "3000:3000"
+      - "3000"
+    networks:
+      - "api.network"
     depends_on:
       - "processing"
       - "audit_log"
   storage:
     image: storage
     ports:
-      - "8090:8090"
+      - "8090"
+    networks:
+      - "api.network"
     environment:
       - TARGET_ENV=test
     volumes:
@@ -107,3 +132,5 @@ volumes:
   processing-db:
   kafka_volume:
   zookeeper_volume:
+networks:
+  api.network:
