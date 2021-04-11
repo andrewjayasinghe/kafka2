@@ -60,7 +60,7 @@ services:
       - "processing"
       - "audit_log"
       - "dashboard-ui"
-    ports"
+    ports:
       - "80:80"
     networks:
       - "api.network"
